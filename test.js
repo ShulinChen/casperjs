@@ -1,9 +1,11 @@
+
+
 var firstUrl;
 casper.test.begin('PulseHR feedback test', 2, function(test){
 	casper.start('http://pulse-360-dev.herokuapp.com/plugin/app', function(){
 		this.fill('form#login',{
 			'email' : 'admin@pulsehr.net',
-			'password' : 'blue' 
+			'password' : 'red' 
 		}, true);
 	});
 
