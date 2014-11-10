@@ -4,7 +4,6 @@
 
 var staging_login_url= 'https://pulse-360-staging.herokuapp.com/plugin/app';
 var staging_feedback_url = 'https://pulse-360-staging.herokuapp.com/plugin/app#email?from=rbehera@pulsehr.net';
-var givable_points, status_50, status_100;
 
 var feedback_test = function(test){
 
