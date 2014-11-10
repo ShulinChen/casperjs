@@ -15,28 +15,34 @@ var feedback_test = function(test){
 
 	casper.then(function(){
 		this.sendKeys('textarea#feedback-comment', 'Good job!');
-	});
+		
+		var givable_points = this.evaluate(function(){
+			return $("#givable-points").text(); 
+		});
 
+		var status_50 = this.evaluate(function(){
+			return $("[data-pointvalue=50]").attr('disabled');
+		});
 
-	// casper.evaluate(function(){
-	// 	var givable_points = $("#givable-points").text(); 
-	// 	var status_50 = $("[data-pointvalue=50]").attr('disabled');
-	// 	var status_100 = $("[data-pointvalue=100]").attr('disabled');
-	// 	console.log('givable_points', givable_points);
-	// 	console.log('status_50', status_50);
-	// 	console.log('status_100', status_100);
-	// 	givable_points = parseInt(givable_points);	
-	// });
+		var status_100 = this.evaluate(function(){
+			return $("[data-pointvalue=100]").attr('disabled');
+		});
+		givable_points = parseInt(givable_points);
+		//if the total points are less then 50 or 100..
+		if(givable_points < 50){
+			test.assertEquals(status_50, 'disabled', 'Have less than 50 points: cant give out 50 points');
+		}
 
-	
+		if(givable_points < 100){
+			test.assertEquals(status_100, 'disabled', 'Have less than 100 points:cant give out 100 points');
+		}
 
-	// if(givable_points < 100){
-	// 	test.assertEquals(status_100, 'disabled', 'cant give out 100 points');
-	// 	test.assertEquals(status_50, 'disabled', 'cant give out 50 points');
-	// };	
-	
-	
-	
+		else{
+			test.assertEquals(status_50, 'abled', 'Have over 100 points: able to give 50 points');
+			test.assertEquals(status_50, 'abled', 'Have over 100 points: able to give 50 points');
+		}
+		
+	});	
 }
 
 var submit_feedback = function(test){
@@ -48,6 +54,10 @@ var submit_feedback = function(test){
 		test.assertEvalEquals(function(){
 			return __utils__.findOne('.position').textContent;
 		}, 'CEO', 'the position profile is right!');
+	});
+
+	casper.then(function(){
+		test.assertExists('#post-submit-feedback', 'feedback is successfully created');
 	});
 }
 
@@ -79,7 +89,7 @@ var thanks_page = function(test){
 
 
 
-casper.test.begin('PulseHR feedback test', 5, function(test){
+casper.test.begin('PulseHR feedback test', 13, function(test){
 
 	casper.start(staging_login_url, function(){
 		casper.click('#logout'); //you might or might not need this line due to if the browser has stored the login cookie
@@ -101,10 +111,6 @@ casper.test.begin('PulseHR feedback test', 5, function(test){
 
 		//start over again, click on thanks button
 		feedback_test(test);
-
-		
-
-
 		submit_feedback(test);
 	}); 
 
